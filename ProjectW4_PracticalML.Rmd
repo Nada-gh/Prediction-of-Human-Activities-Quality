@@ -105,7 +105,7 @@ featurePlot(x=TotalAccel,y= training$classe,plot ="ellipse", main ="Feature Expl
 
 Understand the correlation between variables in order to check if we can exclude some redundant variables.
 
-```{r echo=TRUE, fig.width=3, fig.height=3}
+```{r echo=TRUE}
 
 CorrelationMatrix<-cor(TotalAccel)
 
