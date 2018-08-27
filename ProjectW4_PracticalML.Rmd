@@ -41,7 +41,7 @@ cbind(freq=table(classe), percentage=prop.table(table(classe))*100)
 
 #summary(trndta)
  
-hist(trndta$classe,xlab = "Classe" ,main = "Distribution of the participants' activities")
+plot(trndta$classe,xlab = "Classe", ylab = "cout" ,main = "Distribution of the participants' activities")
 
 ```
 
