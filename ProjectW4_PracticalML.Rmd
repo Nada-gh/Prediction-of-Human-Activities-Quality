@@ -29,7 +29,7 @@ tstdta<-read.csv("pml-testing.csv",na.strings = c(NA," ","#DIV/0!"))
 
 Before I go deeply through the main analysis for the prediction process, I need to understand the distribution of our data through some statistical techniques.
 
-```{r echo=TRUE, results='asis', fig.show='asis'}
+```{r First exploration for our data, echo=TRUE, results='asis', fig.cap="Distribution of the Participants Activities' Quality"}
 
 attach(trndta)
 
@@ -41,7 +41,7 @@ cbind(freq=table(classe), percentage=prop.table(table(classe))*100)
 
 #summary(trndta)
  
-plot(trndta$classe,xlab = "Classe", ylab = "Cout" ,main = "Distribution of the Participants' Activities")
+plot(trndta$classe,xlab = "Classe", ylab = "Cout" ,main = "Distribution of the Participants Activities' Quality")
 
 ```
 
@@ -93,7 +93,7 @@ testing<-clnTrnDta[-InTrain,]
 
 Since we have a large number of features, I tried to manually select some features (total accelartion) and explore their distribution with repect to the "classe" variable. 
 
-```{r Features visualization, echo=TRUE}
+```{r Features visualization, echo=TRUE, fig.cap="Feature Visualization"}
 
 Tot<- which(grepl("^total",names(training),ignore.case = F))
 
@@ -105,7 +105,7 @@ featurePlot(x=TotalAccel,y= training$classe,plot ="ellipse", main ="Feature Expl
 
 Understand the correlation between variables in order to check if we can exclude some redundant variables.
 
-```{r echo=TRUE}
+```{r Features Correlation, echo=TRUE, fig.cap="Features' Correlation"}
 
 CorrelationMatrix<-cor(TotalAccel)
 
@@ -121,7 +121,7 @@ corrplot(CorrelationMatrix)
 
 In order to test the robustness of the model that it can be generalized for new "unseen" future data (i.e. so we can avoid overfitting), we applied K-fold as a cross-validation technique with K=5. For the prediction process, I chose Randome Forest since it performs well in terms of its accuracy. 
 
-```{r echo=TRUE, fig.width=3, fig.height=3, cache=TRUE}
+```{r echo=TRUE, fig.cap="Importance of Features according to RF analysis", cache=TRUE}
 
 set.seed(7)
 
