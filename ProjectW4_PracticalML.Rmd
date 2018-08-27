@@ -100,3 +100,16 @@ TotalAccel<-training[,Tot]
 featurePlot(x=TotalAccel,y= training$classe,plot ="ellipse", main ="Feature Exploration" )
 
 ```
+
+Understand the correlation between variables in order to check if we can exclude some redundant variables.
+
+```{r echo=TRUE, fig.width=3, fig.height=3}
+
+CorrelationMatrix<-cor(TotalAccel)
+
+print(CorrelationMatrix)
+
+highlyCorrelated<-findCorrelation(CorrelationMatrix,cutoff = 0.5)
+
+corrplot(CorrelationMatrix)
+```
