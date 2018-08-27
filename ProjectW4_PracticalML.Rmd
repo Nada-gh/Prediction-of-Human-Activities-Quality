@@ -1,0 +1,102 @@
+---
+title: "Practical Machine Learning Project"
+author: "Nada Gohider"
+date: "August 27, 2018"
+output: html_document
+---
+## Introduction
+
+The goal of this project is to predict the Quality of Humans' Activities; what is known as Human Activity Recognition (HAR). In particular, this work focuses on the way in which those activities are carried (quality) by studying the manner in which they did the exercies. 
+
+## Loading the required libraries
+
+```{r, echo=TRUE}
+library(caret)
+library(Hmisc)
+library(dplyr)
+library(corrplot)
+
+```
+
+## Reading and Exploring Data
+
+I first read the given training and testing datasets, and get rid of all the dirty entries by setting them to NA.
+
+```{r echo=TRUE}
+trndta<-read.csv("pml-training.csv",na.strings = c(NA," ","#DIV/0!"))
+tstdta<-read.csv("pml-testing.csv",na.strings = c(NA," ","#DIV/0!"))
+```
+
+Before I go deeply through the main analysis for the prediction process, I need to understand the distribution of our data through some statistical techniques.
+
+```{r echo=TRUE, results='asis'}
+
+attach(trndta)
+
+cbind(freq=table(classe), percentage=prop.table(table(classe))*100)
+
+ dim(trndta)
+
+#str(trndta)
+
+#summary(trndta)
+
+```
+
+## Data Cleaning and Feature Selection
+
+In this part, some features are entierly deleted. By checking the frequency of the Na values, it seems that some features have more than 50% of the observations as NAs. 
+
+```{r echo=TRUE}
+
+L<-sapply(trndta, function(x) sum(is.na(x)))
+
+vec<-which(L>=9608)
+
+clnTrnDta<-trndta[,-vec]
+
+clnTst<-tstdta[,-vec]
+
+```
+
+choose only a particular set of features; Remove features with almost Zero-variation, or not very important in the problem context.
+
+```{r echo=TRUE}
+
+NZV<-nearZeroVar(clnTrnDta)
+
+clnTrnDta<-clnTrnDta[,-NZV]
+
+clnTst<-clnTst[,-NZV]
+
+clnTrnDta<-clnTrnDta[,-c(1:5)]
+
+clnTst<-clnTst[,-c(1:5)]
+
+```
+
+## Data Slicing
+
+```{r echo=TRUE}
+
+InTrain<-createDataPartition(y=clnTrnDta$classe,p=0.75,list = FALSE)
+
+training<-clnTrnDta[InTrain,]
+
+testing<-clnTrnDta[-InTrain,]
+
+```
+
+## Data Exploration with Visualization
+
+Since we have a large number of features, I tried to manually select some features (total accelartion) and explore their distribution with repect to the "classe" variable. 
+
+```{r Features visualization, echo=TRUE}
+
+Tot<- which(grepl("^total",names(training),ignore.case = F))
+
+TotalAccel<-training[,Tot]
+
+featurePlot(x=TotalAccel,y= training$classe,plot ="ellipse", main ="Feature Exploration" )
+
+```
