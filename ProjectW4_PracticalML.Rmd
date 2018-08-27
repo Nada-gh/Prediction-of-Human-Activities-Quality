@@ -113,3 +113,51 @@ highlyCorrelated<-findCorrelation(CorrelationMatrix,cutoff = 0.5)
 
 corrplot(CorrelationMatrix)
 ```
+
+
+## Model Fitting
+
+In order to test the robustness of the model that it can be generalized for new "unseen" future data (i.e. so we can avoid overfitting), we applied K-fold as a cross-validation technique with K=5. For the prediction process, I chose Randome Forest since it performs well in terms of its accuracy. 
+
+```{r echo=TRUE, fig.width=3, fig.height=3, cache=TRUE}
+
+set.seed(7)
+
+trainControl <- trainControl(method="cv", number=5)
+
+FitMdl<-train(classe~., data=training, method="rf", trainControl=trainControl)
+
+Preds<-predict(FitMdl,testing[,-54])
+
+confusionMatrix(Preds,testing$classe)
+
+# estimate variable importance
+importance <- varImp(FitMdl, scale=FALSE)
+
+# summarize importance
+print(importance)
+
+# plot importance
+
+plot(importance)
+
+
+```
+
+## Model Validation
+
+In this section, I am comparing the In. and Out of Sample Error Values. As we know, in-sample error reflects the model accuracy on the training data which is usually small, or at lease much more slower than the out of sample error. We need a model that can be good enough to be generalized on new data so reduce overfitting 
+
+```{r, echo=TRUE, results='asis'}
+
+ OutOfSmapleError<-sum(Preds!=testing$classe)/length(Preds)
+
+OutOfSmapleError
+
+ PredsTrn<-predict(FitMdl,training[,-54])
+ 
+  InSampleError<-sum(PredsTrn!=training$classe)/length(PredsTrn)
+ 
+   InSampleError
+  
+```
