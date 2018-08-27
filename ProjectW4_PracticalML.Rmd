@@ -29,7 +29,7 @@ tstdta<-read.csv("pml-testing.csv",na.strings = c(NA," ","#DIV/0!"))
 
 Before I go deeply through the main analysis for the prediction process, I need to understand the distribution of our data through some statistical techniques.
 
-```{r echo=TRUE, results='asis'}
+```{r echo=TRUE, results='asis', fig.show='asis'}
 
 attach(trndta)
 
