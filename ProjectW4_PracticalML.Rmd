@@ -40,6 +40,8 @@ cbind(freq=table(classe), percentage=prop.table(table(classe))*100)
 #str(trndta)
 
 #summary(trndta)
+ 
+hist(trndta$classe,xlab = "Classe" ,main = "Distribution of the participants' activities")
 
 ```
 
