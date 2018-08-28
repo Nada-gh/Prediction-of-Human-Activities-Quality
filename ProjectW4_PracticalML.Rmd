@@ -2,7 +2,7 @@
 title: "Practical Machine Learning Project"
 author: "Nada Gohider"
 date: "August 27, 2018"
-output: html_document
+output: github_document
 ---
 ## Introduction
 
@@ -145,6 +145,7 @@ plot(importance)
 
 
 ```
+
 
 ## Model Validation
 
